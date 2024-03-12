@@ -1,0 +1,19 @@
+version: '3.7'
+
+name: 'nestjs_auth'
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: nestjs-auth-db
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=nestjs-auth
+    ports:
+      - '3000:3000'
+    volumes:
+      - nestjs_auth_pg_data:/bitnami/postgresql
+
+volumes:
+  nestjs_auth_pg_data:
