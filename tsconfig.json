@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "outDir": "./dist",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "removeComments": true,
     "resolveJsonModule": true,
