@@ -9,6 +9,7 @@ import { TypeOrmPersistenceModule } from './shared/module/persistence/typeorm/ty
     ConfigModule.forRoot(),
     TypeOrmPersistenceModule.forRootAsync({
       entities: [User],
+      migrations: ['database/shared/typeorm/migrations/*.{ts,js}'],
     }),
   ],
   controllers: [],

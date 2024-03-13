@@ -5,10 +5,12 @@ import { ConfigModule } from '@/shared/module/config/config.modules'
 import { ConfigService } from '@/shared/module/config/config.service'
 
 import { DefaultEntity } from './entity/default.entity'
+import { TypeOrmMigrationService } from './service/typeorm-migration.service'
 
 @Module({})
 export class TypeOrmPersistenceModule {
   static forRootAsync(options: {
+    migrations?: string[]
     entities?: Array<typeof DefaultEntity>
   }): DynamicModule {
     return {
@@ -30,6 +32,8 @@ export class TypeOrmPersistenceModule {
           },
         }),
       ],
+      providers: [TypeOrmMigrationService],
+      exports: [TypeOrmMigrationService],
     }
   }
 }

@@ -22,7 +22,8 @@
     "noUnusedParameters": true,
     "outDir": "./dist",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@database/*": ["./database/*"]
     },
     "removeComments": true,
     "resolveJsonModule": true,
@@ -34,5 +35,5 @@
     "strictNullChecks": true,
     "target": "es2020"
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": ["src/**/*", "test/**/*", "database/**/*"]
 }

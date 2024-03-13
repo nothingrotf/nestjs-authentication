@@ -6,6 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "db:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate database/shared/typeorm/migrations/migration  -d ./database/shared/typeorm/migration.datasource.ts",
+    "db:migrate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./database/shared/typeorm/migration.datasource.ts",
+    "db:drop": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./database/shared/typeorm/migration.datasource.ts",
     "build": "nest build",
     "format": "prettier --write 'src/**/*.ts' 'test/**/*.ts' './*.{js,json}'",
     "start": "nest start",
@@ -30,6 +33,7 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.5.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
