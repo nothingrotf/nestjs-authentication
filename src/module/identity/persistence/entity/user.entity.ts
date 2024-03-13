@@ -15,8 +15,8 @@ export class User extends DefaultEntity<User> {
   email: Email
 
   @Column({ type: 'varchar', nullable: false })
-  hash: string
+  password: string
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar' })
   hashedRefreshToken: string
 }
