@@ -13,7 +13,7 @@ export const PASSWORD_HAS_SALT = 10
 export class UserManagementService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async createUser(data: CreateUserDto) {
+  async createUser(data: CreateUserDto): Promise<void> {
     const userExist = await this.userRepository.findOne({
       where: { email: data.email },
     })
