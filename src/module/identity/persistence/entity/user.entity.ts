@@ -21,6 +21,7 @@ export class User extends DefaultEntity<User> {
         return value
       },
     },
+    unique: true,
   })
   email: Email
 
