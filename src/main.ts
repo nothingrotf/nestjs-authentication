@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common'
+import { Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 
 import { AppModule } from './app.module'
@@ -10,6 +10,7 @@ async function bootstrap() {
   const configService = app.get<ConfigService>(ConfigService)
   const port = configService.get('port')
 
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
   await app.listen(port)
 
   logger.log(`🔥 Application is running on: ${await app.getUrl()}`)

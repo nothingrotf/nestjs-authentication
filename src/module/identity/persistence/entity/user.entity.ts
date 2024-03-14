@@ -5,18 +5,28 @@ import { DefaultEntity } from '@/shared/module/persistence/typeorm/entity/defaul
 
 @Entity('users')
 export class User extends DefaultEntity<User> {
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar' })
   firstName: string
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar' })
   lastName: string
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({
+    type: 'varchar',
+    transformer: {
+      to(email: Email) {
+        return email.getValue()
+      },
+      from(value) {
+        return value
+      },
+    },
+  })
   email: Email
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar' })
   password: string
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   hashedRefreshToken: string
 }

@@ -7,6 +7,10 @@ export class Email {
     }
   }
 
+  getValue(): string {
+    return this.value
+  }
+
   private isValid(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   }
