@@ -28,7 +28,6 @@ export class UserManagementService {
       ...data,
       password: hashedPassword,
     })
-    const user = await this.userRepository.insert(newUser)
-    return user
+    await this.userRepository.insert(newUser)
   }
 }
