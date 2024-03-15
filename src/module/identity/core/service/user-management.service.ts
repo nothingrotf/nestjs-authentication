@@ -30,4 +30,16 @@ export class UserManagementService {
     })
     await this.userRepository.insert(newUser)
   }
+
+  async saveUser(user: User): Promise<User> {
+    return await this.userRepository.save(user)
+  }
+
+  async getUserById(id: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ id })
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ email })
+  }
 }

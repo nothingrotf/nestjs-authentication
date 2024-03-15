@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import { Column, Entity } from 'typeorm'
 
 import { DefaultEntity } from '@/shared/module/persistence/typeorm/entity/default.entity'
@@ -18,4 +19,8 @@ export class User extends DefaultEntity<User> {
 
   @Column({ type: 'varchar', nullable: true })
   hashedRefreshToken: string
+
+  async comparePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password)
+  }
 }

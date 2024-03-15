@@ -6,6 +6,12 @@ export const factory = (): Config => {
   const result = configSchema.safeParse({
     env: process.env.NODE_ENV,
     port: process.env.PORT,
+    jwt: {
+      secret: process.env.JWT_SECRET,
+      refreshSecret: process.env.JWT_REFRESH_SECRET,
+      expires: process.env.JWT_EXPIRES,
+      refreshExpires: process.env.JWT_REFRESH_EXPIRES,
+    },
     database: {
       url: process.env.DATABASE_URL,
       host: process.env.DATABASE_HOST,
