@@ -27,12 +27,12 @@ export class AuthService {
     if (!user || (await user?.comparePassword(password)) === false) {
       throw new UserUnauthorizedException()
     }
-    const { token, refreshToken } = await this.getTokenData({
+    const { token, refreshToken } = await this.createTokens({
       email: user.email,
       id: user.id,
     })
 
-    await this.hashAndSaveRefreshToken({
+    await this.saveRefreshToken({
       user,
       refreshToken,
     })
@@ -43,7 +43,7 @@ export class AuthService {
     }
   }
 
-  private async getTokenData(data: JwtPayloadType): Promise<Tokens> {
+  private async createTokens(data: JwtPayloadType): Promise<Tokens> {
     const [token, refreshToken] = await Promise.all([
       await this.jwtService.signAsync(data, {
         secret: this.configService.getOrThrow('jwt.secret', { infer: true }),
@@ -66,7 +66,7 @@ export class AuthService {
     }
   }
 
-  async hashAndSaveRefreshToken({ user, refreshToken }: HashRefreshTokenDto) {
+  async saveRefreshToken({ user, refreshToken }: HashRefreshTokenDto) {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, TOKEN_HAS_SALT)
     user.hashedRefreshToken = hashedRefreshToken
     await this.userManagementService.saveUser(user)
