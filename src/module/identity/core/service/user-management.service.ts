@@ -14,9 +14,7 @@ export class UserManagementService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async createUser(data: CreateUserDto): Promise<void> {
-    const userExist = await this.userRepository.findOne({
-      where: { email: data.email },
-    })
+    const userExist = await this.getUserByEmail(data.email)
     if (userExist) {
       throw new ApplicationException({
         HttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
