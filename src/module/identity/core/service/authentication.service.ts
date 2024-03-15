@@ -21,26 +21,23 @@ export class AuthService {
     private readonly userManagementService: UserManagementService,
   ) {}
 
-  async signIn(data: AuthLoginDto) {
+  async signIn(data: AuthLoginDto): Promise<Tokens> {
     const { email, password } = data
     const user = await this.userManagementService.getUserByEmail(email)
     if (!user || (await user?.comparePassword(password)) === false) {
       throw new UserUnauthorizedException()
     }
-    const { token, refreshToken } = await this.createTokens({
+    const tokens = await this.createTokens({
       email: user.email,
       id: user.id,
     })
 
     await this.saveRefreshToken({
       user,
-      refreshToken,
+      refreshToken: tokens.refreshToken,
     })
 
-    return {
-      token,
-      refresh_token: refreshToken,
-    }
+    return tokens
   }
 
   private async createTokens(data: JwtPayloadType): Promise<Tokens> {
@@ -66,7 +63,10 @@ export class AuthService {
     }
   }
 
-  async saveRefreshToken({ user, refreshToken }: HashRefreshTokenDto) {
+  async saveRefreshToken({
+    user,
+    refreshToken,
+  }: HashRefreshTokenDto): Promise<void> {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, TOKEN_HAS_SALT)
     user.hashedRefreshToken = hashedRefreshToken
     await this.userManagementService.saveUser(user)
