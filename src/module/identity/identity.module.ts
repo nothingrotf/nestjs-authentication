@@ -5,7 +5,6 @@ import { ConfigModule } from '@/shared/module/config/config.modules'
 
 import { AuthService } from './core/service/authentication.service'
 import { UserManagementService } from './core/service/user-management.service'
-import { JwtStrategy } from './core/strategy/jwt.strategy'
 import { JwtRefreshStrategy } from './core/strategy/jwt-refresh.strategy'
 import { IdentityController } from './http/rest/identity.controller'
 import { UserRepository } from './persistence/repository/user.repository'
@@ -16,7 +15,6 @@ import { UserRepository } from './persistence/repository/user.repository'
     UserManagementService,
     UserRepository,
     AuthService,
-    JwtStrategy,
     JwtRefreshStrategy,
   ],
   controllers: [IdentityController],

@@ -3,11 +3,13 @@ import { JwtService } from '@nestjs/jwt'
 import bcrypt from 'bcrypt'
 
 import { JwtPayloadType } from '@/module/identity/core/strategy/types/jwt-payload.type'
+import { AccessDenied } from '@/module/identity/http/exception/access-denied-exception'
 import { UserUnauthorizedException } from '@/module/identity/http/exception/user-unauthorized-exception'
 import { ConfigService } from '@/shared/module/config/config.service'
 
 import { AuthLoginDto } from './dto/auth-user-login.dto'
 import { HashRefreshTokenDto } from './dto/hash-refresh-token.dto'
+import { RefreshTokenDto } from './dto/refresh-token.dto'
 import { Tokens } from './type/tokens'
 import { UserManagementService } from './user-management.service'
 
@@ -29,19 +31,17 @@ export class AuthService {
     }
     const tokens = await this.createTokens({
       email: user.email,
-      id: user.id,
+      userId: user.id,
     })
-
     await this.saveRefreshToken({
       user,
       refreshToken: tokens.refreshToken,
     })
-
     return tokens
   }
 
   private async createTokens(data: JwtPayloadType): Promise<Tokens> {
-    const [token, refreshToken] = await Promise.all([
+    const [accesstoken, refreshToken] = await Promise.all([
       await this.jwtService.signAsync(data, {
         secret: this.configService.getOrThrow('jwt.secret', { infer: true }),
         expiresIn: this.configService.getOrThrow('jwt.expires', {
@@ -58,7 +58,7 @@ export class AuthService {
       }),
     ])
     return {
-      token,
+      accesstoken,
       refreshToken,
     }
   }
@@ -70,5 +70,28 @@ export class AuthService {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, TOKEN_HAS_SALT)
     user.hashedRefreshToken = hashedRefreshToken
     await this.userManagementService.saveUser(user)
+  }
+
+  async refreshToken(data: RefreshTokenDto): Promise<Tokens> {
+    const user = await this.userManagementService.getUserById(data.userId)
+    if (!user || !user.hashedRefreshToken) {
+      throw new AccessDenied()
+    }
+    const isRefreshTokenValid = await bcrypt.compare(
+      data.refreshToken,
+      user.hashedRefreshToken,
+    )
+    if (!isRefreshTokenValid) {
+      throw new AccessDenied()
+    }
+    const tokens = await this.createTokens({
+      userId: user.id,
+      email: user.email,
+    })
+    await this.saveRefreshToken({
+      user,
+      refreshToken: tokens.refreshToken,
+    })
+    return tokens
   }
 }
