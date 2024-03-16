@@ -1,6 +1,6 @@
 {
   "name": "nestjs-authentication",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "NestJS Authentication study using JWT, Refresh Token Strategies, TypeORM, PostgreSQL and Docker",
   "author": "NothingRotf",
   "private": true,
