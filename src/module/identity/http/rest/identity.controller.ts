@@ -43,7 +43,7 @@ export class IdentityController {
     @GetCurrentUserId() userId: string,
     @GetCurrentUser('refreshToken') refreshToken: string,
   ): Promise<Tokens> {
-    return this.authService.refreshToken({ userId, refreshToken })
+    return await this.authService.refreshToken({ userId, refreshToken })
   }
 
   @Post('/logout')
