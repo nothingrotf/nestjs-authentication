@@ -94,4 +94,13 @@ export class AuthService {
     })
     return tokens
   }
+
+  async logout(userId: string): Promise<void> {
+    const user = await this.userManagementService.getUserById(userId)
+    if (!user) {
+      throw new AccessDenied()
+    }
+    user.hashedRefreshToken = null
+    await this.userManagementService.saveUser(user)
+  }
 }

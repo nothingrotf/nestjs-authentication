@@ -45,4 +45,11 @@ export class IdentityController {
   ): Promise<Tokens> {
     return this.authService.refreshToken({ userId, refreshToken })
   }
+
+  @Post('/logout')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(@GetCurrentUserId() userId: string) {
+    await this.authService.logout(userId)
+  }
 }

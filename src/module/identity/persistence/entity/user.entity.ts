@@ -18,7 +18,7 @@ export class User extends DefaultEntity<User> {
   password: string
 
   @Column({ type: 'varchar', nullable: true })
-  hashedRefreshToken: string
+  hashedRefreshToken: string | null
 
   async comparePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password)
